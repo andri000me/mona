@@ -34,7 +34,7 @@
 									<div class="input-group-addon">
 										<i class="entypo-user"></i>
 									</div>								
-									<input type="text" class="form-control" name="username" placeholder="Username" data-validate="required,username" />
+									<input type="text" class="form-control" name="username" placeholder="Username" data-validates="required,username" autocomplete="off" required />
 								</div>							
 							</div>
 							
@@ -43,7 +43,7 @@
 									<div class="input-group-addon">
 										<i class="entypo-key"></i>
 									</div>								
-									<input type="password" class="form-control" name="password" data-validate="required,password" placeholder="Password" />
+									<input type="password" class="form-control" name="password" data-validate="required,password" placeholder="Password" autocomplete="off" required/>
 								</div>						
 							</div>
 							
@@ -68,7 +68,7 @@
 		</tr>
 	</table>
 </div>
-	<?php //$this->load->view('calon/modal') ?>
+	<?php $this->load->view('calon/modal') ?>
 	<?php $this->load->view('footer') ?>
 
 </body>
@@ -82,8 +82,7 @@
 
 	$('#form_login').submit(function(e) {
     	e.preventDefault();
-    	console.log(e)
-		/*$.ajax({
+		$.ajax({
 			url: url+'auth/cek_login',
 			type: 'post',
 			dataType: 'json',
@@ -99,7 +98,7 @@
 		.always(function(e) {
 			if(e.result)
 				location.reload();	
-		});	*/		
+		});		
 	});
 </script>
 <script>

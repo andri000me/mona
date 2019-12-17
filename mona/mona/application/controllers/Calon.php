@@ -9,6 +9,7 @@ class Calon extends CI_Controller {
 		$this->load->model('SoalModel');
 		$this->load->model('JadwalModel');
 		$this->load->helper(array('form','url'));
+		$this->load->helper('form');
 		$this->load->library('form_validation');
 		if(empty($this->session->userdata('authenticated'))){
 	      redirect('auth','refresh');
@@ -29,7 +30,9 @@ class Calon extends CI_Controller {
 			$data = array(
 				'title' 	=> 'Calon Pegawai', 
 				'piye'		=> 'data blm lengkap'
-			);
+			);			
+			// echo json_encode($data);
+			$this->load->view('calon/biodata', $data);
 		} else {
 			$data = array(
 				'title' 		=> 'Calon Pegawai', 
@@ -40,9 +43,9 @@ class Calon extends CI_Controller {
 				'dikerjakan'	=> $this->SoalModel->get_jum_dikerjakan($idUser, $level), 
 				'terjawab'		=> $this->SoalModel->get_terjawab($idUser), 
 			);
+			echo json_encode($data);
+			$this->load->view('calon/dashboard', $data);
 		}		
-		// echo json_encode($data);
-		$this->load->view('calon/dashboard', $data);
 	}
 
 	public function isi_jawaban()
@@ -115,6 +118,56 @@ class Calon extends CI_Controller {
 		);
 		// echo json_encode($data);
 		$this->load->view('calon/mengerjakan', $data);
+	}
+
+	public function isi_biodata()
+	{
+     	/*$targetDir = "D:/xampp/htdocs/asih/admin/img/";
+		$folder="admin";
+		$fileName = basename($_FILES["file"]["name"]);
+		$fileSave = $fileName;
+		$targetFilePath = $targetDir . $fileSave;
+		$fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
+		$allowTypes = array('PNG','JPEG','JPG','jpg','png','jpeg','gif');*/
+		$foto = $_FILES['foto'];
+
+		$config['upload_path'] = 'assets';
+		$config['allowed_types'] = 'image/png|gif|jpg|png';
+		$config['max_size']  = '100';
+		$config['max_width']  = '1024';
+		$config['max_height']  = '768';
+		
+		$this->load->library('upload', $config);
+		
+		if ( ! $this->upload->do_upload()){
+			$error = array('error' => $this->upload->display_errors());
+			print_r($error);
+		}
+		else{
+			$data = array('upload_data' => $this->upload->data());
+			echo "success";
+		}
+
+		print_r($foto);
+
+		
+		if ($foto==''){}else{
+			
+		}
+		/*
+		$name       = $_FILES['file']['name'];  
+		$temp_name  = $_FILES['file']['tmp_name'];  
+		if(isset($name)){
+			if(!empty($name)){      
+				$location = '../uploads/';      
+				if(move_uploaded_file($temp_name, $location.$name)){
+				    echo 'File uploaded successfully';
+				}
+			}       
+		} else {
+			echo 'You should select a file to upload !!';
+		}
+		*/
 	}
 
 

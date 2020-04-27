@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="mona" id="Project_3c83597" template="Default" database="MySql" >
+	<schema name="beautysky" >
+		<table name="biodata" >
+			<column name="id_biodata" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" decimal="0" jt="4" />
+			<column name="nama_user" type="varchar" length="50" decimal="0" jt="12" />
+			<column name="jkel" type="int" length="10" decimal="0" jt="4" >
+				<defo>0</defo>
+			</column>
+			<column name="email" type="varchar" length="30" decimal="0" jt="12" />
+			<column name="telp" type="varchar" length="12" decimal="0" jt="12" >
+				<defo>&#039;0&#039;</defo>
+			</column>
+			<column name="alamat" type="varchar" length="100" decimal="0" jt="12" />
+			<column name="pendidikan" type="int" length="10" decimal="0" jt="4" mandatory="y" />
+			<column name="foto" type="varchar" length="30" decimal="0" jt="12" />
+			<column name="surat_lamaran" type="varchar" length="30" decimal="0" jt="12" />
+			<column name="ijazah" type="varchar" length="30" decimal="0" jt="12" />
+			<column name="tgl_isi" type="datetime" length="19" decimal="0" jt="93" >
+				<defo>current_timestamp()</defo>
+			</column>
+			<index name="pk_biodata" unique="PRIMARY_KEY" >
+				<column name="id_biodata" />
+			</index>
+			<index name="fk_biodata_user" unique="NORMAL" >
+				<column name="id_user" options="ASC" />
+			</index>
+			<fk name="fk_biodata_user" to_schema="beautysky" to_table="user" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_user" pk="id_user" />
+			</fk>
+		</table>
+		<table name="hasil_jawab" >
+			<column name="id_hasil" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_user" type="int" length="10" decimal="0" jt="4" />
+			<column name="id_soal" type="int" length="10" decimal="0" jt="4" />
+			<column name="jawaban" type="int" length="10" decimal="0" jt="4" />
+			<column name="status" type="char" length="1" decimal="0" jt="1" />
+			<column name="skorpsiko" type="int" length="10" decimal="0" jt="4" >
+				<defo>0</defo>
+			</column>
+			<column name="tgl_isi" type="datetime" length="19" decimal="0" jt="93" >
+				<defo>current_timestamp()</defo>
+			</column>
+			<index name="pk_hasil_jawab" unique="PRIMARY_KEY" >
+				<column name="id_hasil" />
+			</index>
+			<index name="fk_hasil_jawab_soal" unique="NORMAL" >
+				<column name="id_soal" options="ASC" />
+			</index>
+			<index name="fk_hasil_jawab_user" unique="NORMAL" >
+				<column name="id_user" options="ASC" />
+			</index>
+			<fk name="fk_hasil_jawab_soal" to_schema="beautysky" to_table="soal" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_soal" pk="id_soal" />
+			</fk>
+			<fk name="fk_hasil_jawab_user" to_schema="beautysky" to_table="user" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_user" pk="id_user" />
+			</fk>
+		</table>
+		<table name="jadwal_test" >
+			<column name="id_jadwal" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_level" type="int" length="10" decimal="0" jt="4" />
+			<column name="tgl_mulai" type="datetime" length="19" decimal="0" jt="93" />
+			<column name="tgl_selesai" type="datetime" length="19" decimal="0" jt="93" />
+			<index name="pk_jadwal_test" unique="PRIMARY_KEY" >
+				<column name="id_jadwal" />
+			</index>
+			<index name="fk_jadwal_test_level" unique="NORMAL" >
+				<column name="id_level" options="ASC" />
+			</index>
+			<fk name="fk_jadwal_test_level" to_schema="beautysky" to_table="level" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_level" pk="id_level" />
+			</fk>
+		</table>
+		<table name="kategori" >
+			<column name="id_kategori" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="nama_kategori" type="varchar" length="25" decimal="0" jt="12" />
+			<column name="tgl_isi" type="timestamp" length="19" decimal="0" jt="93" mandatory="y" >
+				<defo>current_timestamp()</defo>
+			</column>
+			<index name="pk_kategori" unique="PRIMARY_KEY" >
+				<column name="id_kategori" />
+			</index>
+		</table>
+		<table name="level" >
+			<column name="id_level" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="nama_level" type="varchar" length="10" decimal="0" jt="12" />
+			<index name="pk_level" unique="PRIMARY_KEY" >
+				<column name="id_level" />
+			</index>
+		</table>
+		<table name="soal" >
+			<column name="id_soal" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_level" type="int" length="10" decimal="0" jt="4" />
+			<column name="id_kategori" type="int" length="10" decimal="0" jt="4" />
+			<column name="pertanyaan" type="varchar" length="500" decimal="0" jt="12" />
+			<column name="jawab_a" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="jawab_b" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="jawab_c" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="jawab_d" type="varchar" length="200" decimal="0" jt="12" />
+			<column name="kunci" type="int" length="10" decimal="0" jt="4" />
+			<column name="deleted" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<column name="tgl_isi" type="datetime" length="19" decimal="0" jt="93" >
+				<defo>current_timestamp()</defo>
+			</column>
+			<index name="pk_soal" unique="PRIMARY_KEY" >
+				<column name="id_soal" />
+			</index>
+			<index name="fk_soal_kategori" unique="NORMAL" >
+				<column name="id_kategori" options="ASC" />
+			</index>
+			<index name="fk_soal_level" unique="NORMAL" >
+				<column name="id_level" options="ASC" />
+			</index>
+			<fk name="fk_soal_kategori" to_schema="beautysky" to_table="kategori" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_kategori" pk="id_kategori" />
+			</fk>
+			<fk name="fk_soal_level" to_schema="beautysky" to_table="level" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_level" pk="id_level" />
+			</fk>
+		</table>
+		<table name="user" >
+			<column name="id_user" type="int" length="10" decimal="0" jt="4" mandatory="y" autoincrement="y" />
+			<column name="id_level" type="int" length="10" decimal="0" jt="4" />
+			<column name="username" type="varchar" length="15" decimal="0" jt="12" />
+			<column name="password" type="varchar" length="45" decimal="0" jt="12" mandatory="y" />
+			<column name="is_karyawan" type="int" length="10" decimal="0" jt="4" mandatory="y" >
+				<defo>0</defo>
+			</column>
+			<column name="deleted" type="int" length="10" decimal="0" jt="4" >
+				<defo>0</defo>
+			</column>
+			<column name="tgl_isi" type="datetime" length="19" decimal="0" jt="93" >
+				<defo>current_timestamp()</defo>
+			</column>
+			<index name="pk_user" unique="PRIMARY_KEY" >
+				<column name="id_user" />
+			</index>
+			<index name="fk_user_level" unique="NORMAL" >
+				<column name="id_level" options="ASC" />
+			</index>
+			<fk name="fk_user_level" to_schema="beautysky" to_table="level" delete_action="restrict" update_action="restrict" >
+				<fk_column name="id_level" pk="id_level" />
+			</fk>
+		</table>
+	</schema>
+	<connector name="mona" database="MySql" driver_class="com.mysql.jdbc.Driver" driver_jar="mysql-connector-java-8.0.18.jar" driver_desc="Standard" host="localhost" port="3306" instance="beautysky" user="root" />
+	<layout name="Default Layout" id="Layout_34f91e9" show_relation="columns" >
+		<entity schema="beautysky" name="biodata" color="BED3F4" x="48" y="448" />
+		<entity schema="beautysky" name="hasil_jawab" color="BED3F4" x="224" y="448" />
+		<entity schema="beautysky" name="jadwal_test" color="BED3F4" x="64" y="48" />
+		<entity schema="beautysky" name="kategori" color="BED3F4" x="544" y="224" />
+		<entity schema="beautysky" name="level" color="BED3F4" x="224" y="224" />
+		<entity schema="beautysky" name="soal" color="BED3F4" x="384" y="224" />
+		<entity schema="beautysky" name="user" color="BED3F4" x="48" y="224" />
+	</layout>
+	<layout name="Sample Layout with Tools" id="Layout_2c39f96" show_column_type="y" show_relation="columns" >
+		<entity schema="beautysky" name="biodata" color="BED3F4" x="48" y="480" />
+		<entity schema="beautysky" name="hasil_jawab" color="BED3F4" x="288" y="480" />
+		<entity schema="beautysky" name="jadwal_test" color="BED3F4" x="80" y="80" />
+		<entity schema="beautysky" name="kategori" color="BED3F4" x="752" y="256" />
+		<entity schema="beautysky" name="level" color="BED3F4" x="288" y="256" />
+		<entity schema="beautysky" name="soal" color="BED3F4" x="512" y="256" />
+		<entity schema="beautysky" name="user" color="BED3F4" x="64" y="256" />
+		<callout x="288" y="144" pointer="Round" >
+			<comment><![CDATA[This is a sample layout with tools. 
+Double-click any table, column or foreign key to edit.
+For better understanding the schema create multiple layouts. 
+Layouts and schema structure are saved to project file.]]></comment>
+		</callout>
+		<group name="user" color="ECF0F7" >
+			<entity schema="beautysky" name="user" />
+			<entity schema="beautysky" name="level" />
+			<entity schema="beautysky" name="soal" />
+			<entity schema="beautysky" name="hasil_jawab" />
+			<entity schema="beautysky" name="biodata" />
+			<entity schema="beautysky" name="jadwal_test" />
+			<entity schema="beautysky" name="kategori" />
+		</group>
+		<script name="Sample SQL Editor" id="Editor_242335" language="SQL" >
+			<string><![CDATA[SELECT * 
+FROM
+	beautysky.level l;]]></string>
+		</script>
+		<browser id="Browse_5569d7a" name="Sample Relational Data Browse" confirm_updates="y" >
+			<browse_table schema="beautysky" entity="level" x="20" y="20" width="400" height="300" >
+				<browse_table schema="beautysky" entity="jadwal_test" fk="fk_jadwal_test_level" x="440" y="20" width="500" height="350" />
+			</browse_table>
+		</browser>
+		<query id="Query_4e1b1c9" name="Sample Query Builder" >
+			<query_table schema="beautysky" name="level" alias="l" x="48" y="48" >
+				<column name="id_level" />
+				<column name="nama_level" />
+				<query_table schema="beautysky" name="jadwal_test" alias="jt" x="208" y="48" fk="fk_jadwal_test_level" type="Inner Join" >
+					<column name="id_jadwal" />
+					<column name="id_level" />
+					<column name="tgl_mulai" />
+					<column name="tgl_selesai" />
+				</query_table>
+			</query_table>
+		</query>
+	</layout>
+</project>

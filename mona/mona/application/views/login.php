@@ -15,6 +15,7 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
+            <img src="<?php echo site_url('assets/image/logo.png') ?>" width="90%">
             <form id="form_login">
               <h1>Login Form</h1>
               <div>

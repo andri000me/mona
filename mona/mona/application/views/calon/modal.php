@@ -1,7 +1,7 @@
 <div class="modal fade" id="modal-register">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form id="form_register_calon" class="validate">
+			<form id="form_register_calon">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 					<h4 class="modal-title">Form Registrasi Karyawan Baru</h4>
@@ -13,7 +13,7 @@
 							<div class="input-group-addon">
 								<i class="entypo-user"></i>
 							</div>								
-							<input type="text" class="form-control" name="username_reg" placeholder="Username" data-validate="required,username_reg" autocomplete="off" />
+							<input type="text" class="form-control" name="username_reg" placeholder="Username" autocomplete="off" required maxlength="10" />
 						</div>							
 					</div>
 					
@@ -22,7 +22,7 @@
 							<div class="input-group-addon">
 								<i class="entypo-key"></i>
 							</div>								
-							<input type="password" class="form-control" name="password_reg" data-validate="required,password_reg" placeholder="Password" autocomplete="off" />
+							<input type="password" class="form-control" name="password_reg" placeholder="Password" autocomplete="off" required />
 						</div>						
 					</div>
 
@@ -31,11 +31,11 @@
 							<div class="input-group-addon">
 								<i class="entypo-tools"></i>
 							</div>								
-							<select class="form-control" name="level" id="level" data-validate="required,level" >
+							<select class="form-control" name="level" id="level" required >
 								<option value="" selected disabled>~~ Pilih Posisi Pekerjaan ~~</option>
-								<option value="4">Calon Dokter</option>
-								<option value="5">Calon Pemijat</option>
-								<option value="6">Calon Apoteker</option>
+								<option value="3">Calon Dokter</option>
+								<option value="4">Calon Pemijat</option>
+								<option value="5">Calon Apoteker</option>
 							</select>
 						</div>						
 					</div>	

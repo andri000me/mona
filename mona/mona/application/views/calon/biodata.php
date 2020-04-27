@@ -37,33 +37,59 @@
                   </div>
                   <div class="x_content">
                     <br />
-                    <form id="form_biodata" metod="post" action="<?php echo base_url() ?>calon/isi_biodata" data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data">
-                    <!-- <?php echo form_open_multipart('calon/isi_biodata'); ?> -->
-                      <div class="form-group">
+                    <!-- <form id="form_biodata" metod="post" action="<?php echo base_url() ?>calon/isi_biodata" data-parsley-validate class="form-horizontal form-label-left" enctype="multipart/form-data"> -->
+                    <?php echo form_open_multipart('calon/isi_biodata'); ?>
+                    <div data-parsley-validate class="form-horizontal form-label-left">
+                      <div class="form-group form-horizontal form-label-left">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="name">Nama Lengkap <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="text" id="name" required="required" class="form-control col-md-7 col-xs-12">
+                          <input type="text" name="nama_user" id="name" required="required" class="form-control col-md-7 col-xs-12">
                         </div>
                       </div>
                       <div class="form-group">
-                        <label class="control-label col-md-3 col-sm-3 col-xs-12">Jenis Kelamin</label>
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="jkel">Jenis Kelamin <span class="required">*</span>
+                        </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <div id="gender" class="btn-group" data-toggle="buttons">
-                            <label class="btn btn-default" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="jkel" value="1"> &nbsp; Laki-Laki &nbsp;
-                            </label>
-                            <label class="btn btn-primary" data-toggle-class="btn-primary" data-toggle-passive-class="btn-default">
-                              <input type="radio" name="jkel" value="0"> Perempuan
-                            </label>
-                          </div>
+                          <select class="form-control col-md-7 col-xs-12" name="jkel" id="jkel" required>
+                            <option value="" selected disabled="">~~Pilih Jenis Kelamin~~</option>
+                            <option value="1">Laki - Laki</option>
+                            <option value="0">Perempuan</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="email">Email <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="email" id="email" name="email" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telp">No Telepon <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <input type="number" id="telp" name="telp" required="required" class="form-control col-md-7 col-xs-12">
+                        </div>
+                      </div>
+                      <div class="form-group">
+                        <label class="control-label col-md-3 col-sm-3 col-xs-12" for="telp">Pendidikan Terakhir <span class="required">*</span>
+                        </label>
+                        <div class="col-md-6 col-sm-6 col-xs-12">
+                          <select class="form-control col-md-7 col-xs-12" name="pendidikan" id="pendidikan" required>
+                            <option value="" selected disabled="">~~Pilih Pendidikan~~</option>
+                            <option value="1">SD</option>
+                            <option value="2">SMP</option>
+                            <option value="3">SMA / SMK</option>
+                            <option value="4">Sarjana ( S1 )</option>
+                          </select>
                         </div>
                       </div>
                       <div class="form-group">
                         <label class="control-label col-md-3 col-sm-3 col-xs-12" for="alamat">Alamat <span class="required">*</span>
                         </label>
                         <div class="col-md-6 col-sm-6 col-xs-12">
-                          <input type="textarea" id="alamat" name="alamat" required="required" class="form-control col-md-7 col-xs-12">
+                          <textarea id="alamat" name="alamat" required="required" class="form-control col-md-7 col-xs-12"></textarea>
                         </div>
                       </div>
                       <div class="form-group">
@@ -91,8 +117,9 @@
                           <button type="submit" class="btn btn-success">Submit</button>
                         </div>
                       </div>
-                    </form>
-                    <!-- <?php echo form_close(); ?> -->
+                    <!-- </form> -->
+                  </div>
+                    <?php echo form_close(); ?>
                   </div>
                 </div>
             </div>

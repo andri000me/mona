@@ -26,39 +26,32 @@
                     <div class="row top_tiles">
                         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="detailTopup()">
                             <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                                <div class="count"><?php //echo $jumTopup->jum; ?>2095</div>
-                                <h3>TopUp</h3>
+                                <div class="icon"><i class="fa fa-group"></i></div>
+                                <div class="count"><?php echo $total; ?></div>
+                                <h3>Karyawan</h3>
                             </div>
                         </div>
                         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="detailTopup()">
                             <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                                <div class="count"><?php //echo $jumTopup->jum; ?>2095</div>
-                                <h3>TopUp</h3>
+                                <div class="icon"><i class="fa fa-pencil"></i></div>
+                                <div class="count"><?php echo $pendaftar; ?></div>
+                                <h3>Total Pendaftar</h3>
                             </div>
                         </div>
                         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="detailTopup()">
                             <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                                <div class="count"><?php //echo $jumTopup->jum; ?>2095</div>
-                                <h3>TopUp</h3>
+                                <div class="icon"><i class="fa fa-check"></i></div>
+                                <div class="count"><?php echo $pendaftarKomplit; ?></div>
+                                <h3>Pendaftar (Biodata)</h3>
                             </div>
                         </div>
                         <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="detailTopup()">
                             <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                                <div class="count"><?php //echo $jumTopup->jum; ?>2095</div>
-                                <h3>TopUp</h3>
+                                <div class="icon"><i class="fa fa-meh-o"></i></div>
+                                <div class="count"><?php echo $pendaftarBelum; ?></div>
+                                <h3>Pendaftar (-Biodata)</h3>
                             </div>
-                        </div>
-                        <div class="animated flipInY col-lg-3 col-md-3 col-sm-6 col-xs-12" onclick="detailTopup()">
-                            <div class="tile-stats">
-                                <div class="icon"><i class="fa fa-caret-square-o-right"></i></div>
-                                <div class="count"><?php //echo $jumTopup->jum; ?>2095</div>
-                                <h3>TopUp</h3>
-                            </div>
-                        </div>
+                        </div>                        
                     </div>
                 </div>
             </div>

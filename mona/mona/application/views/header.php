@@ -14,6 +14,10 @@
 <!-- Animate.css -->
 <link href="<?php echo base_url() ?>assets/animate.css/animate.min.css" rel="stylesheet">
 
+<!-- bootstrap-daterangepicker -->
+<link href="<?php echo base_url() ?>assets/bootstrap-daterangepicker/daterangepicker.css" rel="stylesheet">
+<!-- bootstrap-datetimepicker -->
+<link href="<?php echo base_url() ?>assets/bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.css" rel="stylesheet">
 
 <!-- Datatables -->
 <link href="<?php echo base_url() ?>assets/datatables.net-bs/css/dataTables.bootstrap.min.css" rel="stylesheet">
@@ -22,8 +26,23 @@
 <!-- Custom Theme Style -->
 <link href="<?php echo base_url() ?>build/css/custom.min.css" rel="stylesheet">
 
+<!-- Switchery -->
+<!-- <link href="<?php echo base_url() ?>assets/switchery/dist/switchery.min.css" rel="stylesheet"> -->
+<style>
+      .right_col{
+          background: #ffffff !important;
+      }
+  </style>
+
 <!-- Modal Loading -->
 <div class="modal fade" id="modalLoading" aria-hidden="true">
+  <div class="text-center">
+    <img src="<?php echo base_url()?>assets/image/loading.gif">
+  </div>
+</div>
+
+<!-- MODAL ERROR -->
+<div class="modal" id="modalError" aria-hidden="true">
   <div class="text-center">
     <img src="<?php echo base_url()?>assets/image/loading.gif">
   </div>

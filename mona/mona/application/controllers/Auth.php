@@ -18,11 +18,7 @@ class Auth extends CI_Controller
     }else{
       if ($this->session->userdata('level')==1) {
         redirect('admin','refresh');
-      } else if ($this->session->userdata('level')==2){
-        redirect('manager','refresh');
-      } else if ($this->session->userdata('level')==3){
-        redirect('karyawan','refresh');
-      }else{
+      } else{
         redirect('calon','refresh');
       }      
     }
@@ -66,7 +62,7 @@ class Auth extends CI_Controller
   {
     $username = $this->input->post('username_reg');
     $password = $this->input->post('password_reg'); 
-    $level    = $this->input->post('id_level');
+    $level    = $this->input->post('level');
 
     $isi = array(
       'username' => $username, 
@@ -74,19 +70,28 @@ class Auth extends CI_Controller
       'id_level' => $level, 
     ); 
 
-    $reg = $this->UserModel->register($isi);
-    if ($reg) {
+    /*cek username*/
+    if ($this->UserModel->cek_username($username)==0) {
+      $reg = $this->UserModel->register($isi);
+      if ($reg) {
+        $data = array(
+          'result'  => true, 
+          'ket'     => 'Berhasil Registrasi',
+          'isi'     => $this->UserModel->cek_username($username)
+        ); 
+      } else {
+        $data = array(
+          'result'  => false, 
+          'ket'     => 'Gagal Registrasi',
+          'isi'     => $isi
+        );
+      }
+    }else{
       $data = array(
-        'result'  => true, 
-        'ket'     => 'Berhasil Registrasi',
-        'isi'     => $isi
-      ); 
-    } else {
-      $data = array(
-        'result'  => false, 
-        'ket'     => 'Gagal Registrasi',
-        'isi'     => $isi
-      );
+          'result'  => false, 
+          'ket'     => 'Gagal Registrasi, Username sudah ada yang punya',
+          'isi'     => $isi
+        );
     }
     echo json_encode($data);    
   }

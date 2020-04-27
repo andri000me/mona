@@ -14,6 +14,14 @@ class Admin extends CI_Controller {
 		if(empty($this->session->userdata('authenticated'))){
 	      redirect('auth','refresh');
 	    }
+	    if($this->session->userdata('level')!=1){
+	    ?>
+	    <script>
+	    	alert('Anda Bukan Admin');
+	    </script>
+	    <?php
+	      redirect('auth','refresh');
+	    }
 	}
 
 	public function index()
@@ -25,11 +33,21 @@ class Admin extends CI_Controller {
 
 		$biodata = $this->CalonModel->get_biodata_by_id($idUser);
 		$data = array(
-			'title' 		=> 'Dashboard', 
-			'dataUser'	 	=> $biodata,
+			'title' 			=> 'Dashboard', 
+			'dataUser'	 		=> $biodata,
+			'total'	 			=> $this->UserModel->cout_karyawan(),
+			'pendaftar'			=> $this->UserModel->cout_pendaftar(),
+			'pendaftarKomplit'	=> $this->UserModel->cout_pendaftar_komplit(),
+			'pendaftarBelum'	=> $this->UserModel->cout_pendaftar_belum_komplit(),
 		);
-		
+		// echo json_encode($data);
 		$this->load->view('admin/dashboard', $data);
+	}
+
+	public function getLevel()
+	{
+		$level = array('level' => $this->UserModel->fetch_kategori_test());
+		echo json_encode($level);
 	}
 
 }

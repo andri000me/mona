@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html)>
 <html lang="en">
 <head>
     <?php $this->load->view('header'); ?>
@@ -20,15 +20,20 @@
 
 <body class="putih">
     <div class="row">
+      <div class="pull-right">
+        <div class="btn btn-danger" style="margin-right: 10px" id="waktu"></div>
+      </div>
+    </div>
+    <div class="row">
         <div class="col-mod-12">
-            <div class="text-center">
-              <h1>Selamat Datang</h1>
-              <h1>
-                  <?php echo $this->session->userdata('nama_user'); ?>
-              </h1>
-              <h3>SEMANGAT MENGERJAKAN <?php echo $kategori;?></h3>
-            </div>
-            <hr>
+          <div class="text-center">
+            <h1>Selamat Datang</h1>
+            <h1>
+                <?php echo $this->session->userdata('nama_user'); ?>
+            </h1>
+            <h3>SEMANGAT MENGERJAKAN <?php echo $kategori;?></h3>
+          </div>
+          <hr>
         </div>
     </div>
     <div class="row" style=""></div>
@@ -101,41 +106,41 @@
                         <?php
                           if ($j1) {?>
                             <div class="tile-stats" id="jawab_1_<?php echo $s->id_soal ?>" style="background: aqua">
-                              A. <?php echo $s->jawab_a; ?>
+                              A. <?php echo html_entity_decode($s->jawab_a); ?>
                             </div>
                           <?php } else {?>
                             <div class="tile-stats" id="jawab_1_<?php echo $s->id_soal ?>">
-                              A. <?php echo $s->jawab_a; ?>
+                              A. <?php echo html_entity_decode($s->jawab_a); ?>
                             </div>
                           <?php }
                           
                           if ($j2) {?>
                             <div class="tile-stats" id="jawab_2_<?php echo $s->id_soal ?>" style="background: aqua">
-                              B. <?php echo $s->jawab_b; ?>
+                              B. <?php echo html_entity_decode($s->jawab_b); ?>
                             </div>
                           <?php } else {?>
                             <div class="tile-stats" id="jawab_2_<?php echo $s->id_soal ?>">
-                              B. <?php echo $s->jawab_b; ?>
+                              B. <?php echo html_entity_decode($s->jawab_b); ?>
                             </div>
                           <?php }
                           
                           if ($j3) {?>
                             <div class="tile-stats" id="jawab_3_<?php echo $s->id_soal ?>" style="background: aqua">
-                              C. <?php echo $s->jawab_c; ?>
+                              C. <?php echo html_entity_decode($s->jawab_c); ?>
                             </div>
                           <?php } else {?>
                             <div class="tile-stats" id="jawab_3_<?php echo $s->id_soal ?>">
-                              C. <?php echo $s->jawab_c; ?>
+                              C. <?php echo html_entity_decode($s->jawab_c); ?>
                             </div>
                           <?php }
 
                           if ($j4) {?>
                             <div class="tile-stats" id="jawab_4_<?php echo $s->id_soal ?>" style="background: aqua">
-                              D. <?php echo $s->jawab_d; ?>
+                              D. <?php echo html_entity_decode($s->jawab_d); ?>
                             </div>
                           <?php } else {?>
                             <div class="tile-stats" id="jawab_4_<?php echo $s->id_soal ?>">
-                              D. <?php echo $s->jawab_d; ?>
+                              D. <?php echo html_entity_decode($s->jawab_d); ?>
                             </div>
                           <?php }                          
                         ?>
@@ -177,14 +182,17 @@
 
 <script>
   $(document).ready(function() {
+
    $(".tile-stats").click(function(e){
-    $('#modalLoading').modal('show');
     var id = e.target.id.split('_');
     var terpilih  = id[1];
     var idSoal    = id[2];   
-    matikan_warna(idSoal);
-    isi_jawaban(terpilih, idSoal);
-    $('#jawab_'+terpilih+'_'+idSoal).css({"background-color":"#62ff00"}); 
+    if(idSoal!=null){
+      $('#modalLoading').modal('show');
+      matikan_warna(idSoal);
+      isi_jawaban(terpilih, idSoal);
+      $('#jawab_'+terpilih+'_'+idSoal).css({"background-color":"#62ff00"}); 
+    }
    });
   });
 
@@ -207,7 +215,7 @@
       data: param,
     })
     .done(function(e) {
-      // console.log(e);
+      console.log(e);
     })
     .fail(function() {
       console.log("error");
@@ -216,4 +224,42 @@
       $('#modalLoading').modal('hide');      
     });  
   }
+</script>
+
+<script>
+  $(document).ready(function() {
+    var x     = <?php echo $waktu; ?>;
+    var y     = x % 3600;
+    var jam   = x / 3600;
+    var menit = y / 60;
+    var detik = y % 60;
+    
+    var waktu = Math.floor(jam) + ':' + Math.floor(menit) + ':' + Math.floor(detik);
+    console.log(waktu);
+    display = document.querySelector('#waktu');
+    display.textContent = waktu;
+
+    setInterval(function () {
+      var res=false;
+      var isOnLine = navigator.onLine;
+      if(isOnLine){
+            x--;
+            y     = x % 3600;
+            jam   = x / 3600;
+            menit = y / 60;
+            detik = y % 60;
+            waktu = Math.floor(jam) + ':' + Math.floor(menit) + ':' + Math.floor(detik);
+            console.log(waktu);
+            display = document.querySelector('#waktu');
+            display.textContent = waktu;
+            res = true;
+        }
+        if(res){
+            if (!isOnLine) {
+                console.log('ora')
+                res = false;
+            }
+        }
+    }, 1000);
+  });
 </script>

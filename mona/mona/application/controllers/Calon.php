@@ -22,14 +22,15 @@ class Calon extends CI_Controller {
 	      redirect('auth','refresh');
 	    }
 		$idUser = $this->session->userdata('id_user');
-		$level 	= $this->session->userdata('level');
 		$sekarang = date('Y-m-d H:i:s');
 
 		$biodata = $this->CalonModel->get_biodata_by_id($idUser);
-		if (empty($biodata)) {
+		$level 	= $biodata->id_level;
+		if (empty($biodata->id_biodata)) {
 			$data = array(
 				'title' 	=> 'Calon Pegawai', 
-				'piye'		=> 'data blm lengkap'
+				'piye'		=> 'data blm lengkap',
+				'biodata'	=> $biodata,
 			);			
 			// echo json_encode($data);
 			$this->load->view('calon/biodata', $data);
@@ -37,13 +38,15 @@ class Calon extends CI_Controller {
 			$data = array(
 				'title' 		=> 'Calon Pegawai', 
 				'dataUser'	 	=> $biodata,
+				'sekarang'	 	=> $sekarang,
 				'jadwal' 		=> $this->JadwalModel->fetch_all_jadwal_aktif_by_level($sekarang, $level), 
 				'jadwalLevel'	=> $this->JadwalModel->fetch_all_jadwal_by_level($level), 
 				'kategori'		=> $this->SoalModel->fetch_kategori_soal_by_level($level),
+				'psiko'			=> $this->SoalModel->fetch_kategori_soal_by_level(null),
 				'dikerjakan'	=> $this->SoalModel->get_jum_dikerjakan($idUser, $level), 
 				'terjawab'		=> $this->SoalModel->get_terjawab($idUser), 
 			);
-			echo json_encode($data);
+			// echo json_encode($data);
 			$this->load->view('calon/dashboard', $data);
 		}		
 	}
@@ -60,31 +63,56 @@ class Calon extends CI_Controller {
 		$jawaban 	= $this->input->post('terpilih');
 
 		$sudah 		= $this->SoalModel->cek_jawaban_calon_by_id_soal($idUser, $idSoal);
-		$kunci 		= $this->SoalModel->get_jawaban_soal($idSoal);
+		$soal_kateg	= $this->SoalModel->get_jawaban_soal($idSoal);
 		
-		if ($kunci->kunci == $jawaban) {
-			$status=1;
+		if ($soal_kateg->id_kategori!=100) {
+			if ($soal_kateg->kunci == $jawaban) {
+				$status=1;
+			} else {
+				$status=0;
+			}
+			$skorpsiko=0;
 		} else {
 			$status=0;
-		}		
-
+			switch ($jawaban) {
+				case 1:
+					$skorpsiko=1;
+					break;
+				case 2:
+					$skorpsiko=2;
+					break;
+				case 3:
+					$skorpsiko=3;
+					break;
+				case 4:
+					$skorpsiko=4;
+					break;
+				
+				default:
+					$skorpsiko=0;
+					break;
+			}
+		}
+					
+		
 		if ($sudah) {
-			$res =  $this->SoalModel->update_jawaban_soal($idUser, $idSoal, $jawaban, $status, $sekarang);
+			$res =  $this->SoalModel->update_jawaban_soal($idUser, $idSoal, $jawaban, $status, $skorpsiko, $sekarang);
 		} else {
 			$isi = array(
 				'id_user' 	=> $idUser, 
 				'id_soal' 	=> $idSoal, 
 				'jawaban' 	=> $jawaban, 
 				'status' 	=> $status, 
+				'skorpsiko'	=> $skorpsiko, 
 			);
 			$res =  $this->SoalModel->isi_jawaban_soal($isi);
 		}
+		
 		echo json_encode($res);
 	}
 
 	public function mengerjakan($id_kategori)
 	{
-
 		if(empty($this->session->userdata('authenticated'))){
 	      redirect('auth','refresh');
 	    }
@@ -101,12 +129,16 @@ class Calon extends CI_Controller {
 		$sekarang = date('Y-m-d H:i:s');
 
 		$biodata = $this->CalonModel->get_biodata_by_id($idUser);
-		$dikerjakan = $this->SoalModel->get_jum_dikerjakan($idUser, $level);
+		$dikerjakan = $this->SoalModel->kategori_soal_calon($idUser, $level);
 
 		foreach ($dikerjakan as $val) {
 			if ($val->id_kategori == $id_kategori) {
 				$test = $val->nama_kategori;
 			}
+		}
+
+		if (empty($test)) {
+			redirect('calon');
 		}
 		$data = array(
 			'title' 	=> 'Mengerjakan', 
@@ -115,59 +147,85 @@ class Calon extends CI_Controller {
 			'soal' 		=> $this->SoalModel->fetch_soal_by_pekerjaan($level, $id_kategori),
 			'dikerjakan'=> $dikerjakan, 
 			'terjawab'	=> $this->SoalModel->get_terjawab($idUser), 
+			'waktu'		=> '30', 
 		);
 		// echo json_encode($data);
 		$this->load->view('calon/mengerjakan', $data);
 	}
 
 	public function isi_biodata()
-	{
-     	/*$targetDir = "D:/xampp/htdocs/asih/admin/img/";
-		$folder="admin";
-		$fileName = basename($_FILES["file"]["name"]);
-		$fileSave = $fileName;
-		$targetFilePath = $targetDir . $fileSave;
-		$fileType = pathinfo($targetFilePath,PATHINFO_EXTENSION);
-		$allowTypes = array('PNG','JPEG','JPG','jpg','png','jpeg','gif');*/
-		$foto = $_FILES['foto'];
-
-		$config['upload_path'] = 'assets';
-		$config['allowed_types'] = 'image/png|gif|jpg|png';
-		$config['max_size']  = '100';
-		$config['max_width']  = '1024';
-		$config['max_height']  = '768';
+	{	
+		$config['upload_path'] 		= './assets/image/';
+		$config['allowed_types'] 	= 'gif|jpg|jpeg|png';
+		$config['max_size']  		= '1024';
+		$config['file_name']		= substr(md5($this->session->userdata('username')), 0,10).substr(rand(), 0,10);
 		
-		$this->load->library('upload', $config);
-		
-		if ( ! $this->upload->do_upload()){
-			$error = array('error' => $this->upload->display_errors());
-			print_r($error);
-		}
-		else{
-			$data = array('upload_data' => $this->upload->data());
-			echo "success";
+		$cek = $this->load->library('upload', $config);
+		$error = array();
+		if ($_FILES['foto']['name']!=null) {
+			if ( ! $this->upload->do_upload('foto')){
+				$data = 'Foto => '.$this->upload->display_errors();
+				// $error['foto'] = $data;
+				?>
+					<script>
+						alert('gagal simpan, cek dokumen foto anda');
+					</script>
+				<?php
+			}
+			else{
+				$foto = $this->upload->data('file_name');
+			}
 		}
 
-		print_r($foto);
+		if ($_FILES['suratlamaran']['name']!=null) {
+			if ( ! $this->upload->do_upload('suratlamaran')){
+				$data = 'Surat Lamaran => '.$this->upload->display_errors();
+				// $error['suratlamaran'] = $data;
+				?>
+					<script>
+						alert('gagal simpan, cek dokumen surat lamaran anda');
+					</script>
+				<?php
+			}
+			else{
+				$suratlamaran = $this->upload->data('file_name');
+			}
+		} 
+
+		if ($_FILES['ijazah']['name']!=null) {
+			if ( ! $this->upload->do_upload('ijazah')){
+				$data = 'ijazah => '.$this->upload->display_errors();
+				// $error['ijazah'] = $data;
+				?>
+					<script>
+						alert('gagal simpan, cek dokumen ijazah anda');
+					</script>
+				<?php
+			}
+			else{
+				$ijazah = $this->upload->data('file_name');
+			}
+		} 
+		if (empty($data)) {
+			$isi = array(
+				'id_user' 		=> $this->session->userdata('id_user'),
+				'nama_user'		=> $this->input->post('nama_user'),
+				'jkel'			=> $this->input->post('jkel'),
+				'email'			=> $this->input->post('email'),
+				'alamat'		=> $this->input->post('alamat'),
+				'pendidikan'	=> $this->input->post('pendidikan'),
+				'foto'			=> $foto,
+				'surat_lamaran'	=> $suratlamaran,
+				'ijazah'		=> $ijazah,
+			);
+			if($this->CalonModel->isi_biodata($isi)){
+				redirect('auth','refresh');
+			}
+		}else{
+			redirect('calon','refresh');
+		}
 
 		
-		if ($foto==''){}else{
-			
-		}
-		/*
-		$name       = $_FILES['file']['name'];  
-		$temp_name  = $_FILES['file']['tmp_name'];  
-		if(isset($name)){
-			if(!empty($name)){      
-				$location = '../uploads/';      
-				if(move_uploaded_file($temp_name, $location.$name)){
-				    echo 'File uploaded successfully';
-				}
-			}       
-		} else {
-			echo 'You should select a file to upload !!';
-		}
-		*/
 	}
 
 
